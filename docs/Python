@@ -1,0 +1,43 @@
+from moviepy.editor import (
+    VideoFileClip,
+    ImageClip,
+    TextClip,
+    CompositeVideoClip,
+    concatenate_videoclips,
+    AudioFileClip,
+)
+
+# Paths to assets
+scene1_image = "path/to/scene1.png"
+scene2_image = "path/to/scene2.png"
+scene3_image = "path/to/scene3.png"
+audio_file = "path/to/background-music.mp3"
+
+# Scene durations
+scene_duration = 4  # 4 seconds per scene
+
+# Create video clips from images
+scene1 = ImageClip(scene1_image).set_duration(scene_duration).resize(height=1080)
+scene2 = ImageClip(scene2_image).set_duration(scene_duration).resize(height=1080)
+scene3 = ImageClip(scene3_image).set_duration(scene_duration).resize(height=1080)
+
+# Add text overlays
+text1 = TextClip("AI智能助手助力投資", fontsize=50, color="white").set_position("center").set_duration(scene_duration)
+text2 = TextClip("即時數據分析", fontsize=50, color="white").set_position("center").set_duration(scene_duration)
+text3 = TextClip("立即領取專屬推薦清單！", fontsize=50, color="white").set_position("center").set_duration(scene_duration)
+
+# Overlay text on images
+scene1 = CompositeVideoClip([scene1, text1])
+scene2 = CompositeVideoClip([scene2, text2])
+scene3 = CompositeVideoClip([scene3, text3])
+
+# Combine all scenes into one video
+final_video = concatenate_videoclips([scene1, scene2, scene3])
+
+# Add background music
+audio = AudioFileClip(audio_file).subclip(0, final_video.duration)
+final_video = final_video.set_audio(audio)
+
+# Export the final video
+output_file = "AI_Stock_Analysis_Ad.mp4"
+final_video.write_videofile(output_file, fps=24)
